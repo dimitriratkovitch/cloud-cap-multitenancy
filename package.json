@@ -1,0 +1,74 @@
+{
+  "name": "bookshop-backend",
+  "version": "1.0.0",
+  "description": "A simple CAP project.",
+  "repository": "<Add your repository here>",
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^4",
+    "@sap/hana-client": "^2.6.58",
+    "@sap/xssec": "^2",
+    "express": "^4",
+    "passport": "^0.4.1"
+  },
+  "devDependencies": {
+    "sqlite3": "^5"
+  },
+  "scripts": {
+    "start": "npx cds run",
+    "deploy:cf": "cf deploy mta_archives/capmt_0.0.1.mtar --retries 0"
+  },
+  "cds": {
+    "hana": {
+      "deploy-format": "hdbtable"
+    },
+    "requires": {
+      "db": {
+        "kind": "hana"
+      },
+      "uaa": {
+        "kind": "xsuaa"
+      },
+      "auth": {
+        "passport": {
+          "strategy": "JWT"
+        }
+      }
+    },
+    "build": {
+      "target": "gen",
+      "tasks": [
+        {
+          "src": "db_comm",
+          "for": "hana",
+          "options": {
+            "model": [
+              "db_comm"
+            ]
+          }
+        },
+        {
+          "src": "db_sub",
+          "for": "hana",
+          "options": {
+            "model": [
+              "db_sub",
+              "srv"
+            ]
+          }
+        },
+        {
+          "src": "srv",
+          "for": "node-cf",
+          "options": {
+            "model": [
+              "db_sub",
+              "srv"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}
