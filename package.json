@@ -1,14 +1,16 @@
 {
-  "name": "bookshop-backend",
+  "name": "capmt",
   "version": "1.0.0",
   "description": "A simple CAP project.",
   "repository": "<Add your repository here>",
   "license": "UNLICENSED",
   "private": true,
   "dependencies": {
+    "@sap/audit-logging": "^3.2.0",
     "@sap/cds": "^4",
     "@sap/hana-client": "^2.6.58",
-    "@sap/xssec": "^2",
+    "@sap/xsenv": "^3.1.0",
+    "@sap/xssec": "^2.2.5",
     "express": "^4",
     "passport": "^0.4.1"
   },
@@ -17,25 +19,10 @@
   },
   "scripts": {
     "start": "npx cds run",
-    "deploy:cf": "cf deploy mta_archives/capmt_0.0.1.mtar --retries 0"
+    "deploy:cf": "cf deploy mta_archives/capmt_0.0.1.mtar --retries 0",
+    "build": "npx cds build/all --clean"
   },
   "cds": {
-    "hana": {
-      "deploy-format": "hdbtable"
-    },
-    "requires": {
-      "db": {
-        "kind": "hana"
-      },
-      "uaa": {
-        "kind": "xsuaa"
-      },
-      "auth": {
-        "passport": {
-          "strategy": "JWT"
-        }
-      }
-    },
     "build": {
       "target": "gen",
       "tasks": [
@@ -49,11 +36,11 @@
           }
         },
         {
-          "src": "db_sub",
+          "src": "db",
           "for": "hana",
           "options": {
             "model": [
-              "db_sub",
+              "db",
               "srv"
             ]
           }
@@ -63,12 +50,43 @@
           "for": "node-cf",
           "options": {
             "model": [
-              "db_sub",
+              "db",
               "srv"
             ]
           }
         }
       ]
+    },
+    "[development]": {
+      "comment": "Anything defined inside of [development] will overrided prior values.",
+      "hana": {
+        "deploy-format": "hdbtable"
+      },
+      "requires": {
+        "db": {
+          "kind": "hana"
+        },
+        "uaa": {
+          "kind": "xsuaa"
+        },
+        "auth": {
+          "strategy": "JWT"
+        }
+      }
+    },
+    "[production]": {
+      "comment": "Anything defined inside of [production] will overrided prior values.",
+      "hana": {
+        "deploy-format": "hdbtable"
+      },
+      "requires": {
+        "db": {
+          "kind": "hana"
+        },
+        "uaa": {
+          "kind": "xsuaa"
+        }
+      }
     }
   }
 }

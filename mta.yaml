@@ -46,8 +46,10 @@ modules:
     path: gen/srv
     requires:
       # Resources extracted from CAP configuration
-      - name: capmt-hdb-sub
+      - name: capmt-hdi-sub
       - name: capmt-uaa
+    #    properties:
+    #      EXIT: 1 # required by deploy.js task to terminate
     build-parameters:
       ignore: ["node_modules/"]
     provides:
@@ -72,14 +74,12 @@ modules:
     requires:
       # 'hana' and 'xsuaa' resources extracted from CAP configuration
       - name: capmt-hdi-comm
-        properties:
-          TARGET_CONTAINER: "~{common-container-name}"
 
   # -------------------- SUBSCRIBER DB MODULE ------------------------
   - name: capmt-hdb-sub
     # ------------------------------------------------------------
     type: hdb
-    path: gen/db_sub
+    path: gen/db
     parameters:
       buildpack: nodejs_buildpack
     build-parameters:
@@ -119,7 +119,7 @@ resources:
       service-plan: hdi-shared
       service-name: CAPMT_HDI_SUB
       config:
-        schema: SUBSCRIPTION
+    #        schema: SUBSCRIPTION
     properties:
       subscription-container-name: ${service-name}
   - name: capmt-uaa

@@ -3,10 +3,12 @@
   "logout": {
     "logoutEndpoint": "/do/logout"
   },
- "routes": [ {
+  "routes": [
+    {
       "source": "^/(.*)$",
       "destination": "srv-api",
       "csrfProtection": true,
       "authenticationType": "xsuaa"
-    } ]
+    }
+  ]
 }

@@ -19,12 +19,12 @@
 [ERROR] db/common-data-model.cds:14:8-14: Duplicate definition of artifact "common.States" (in entity:"common.States")
 [ERROR] db_comm/data-model.cds:4:8-14: Duplicate definition of artifact "common.States" (in entity:"common.States")
 */
-/*
+
 namespace common;
 
 // Access directly via Synonym
 @cds.persistence.exists
-entity Currencies {
+entity Currencies_for_view {
   key code : String(3);
   name     : String(128);
   UperUSD  : Double;
@@ -33,9 +33,8 @@ entity Currencies {
 
 // Access directly via Synonym
 @cds.persistence.exists
-entity States {
+entity States_for_view {
   key code : String(2);
   abbrev   : String(6);
   name     : String(24);
 }
-*/
